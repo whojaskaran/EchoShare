@@ -7,7 +7,7 @@ const server = http.createServer(app);
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000'; // Default to dev origin
 const io = socketIo(server, {
     cors: {
-        origin: CLIENT_URL, // Allow connections from your client's origin
+        origin: '*', // Allow connections from any origin
         methods: ['GET', 'POST']
     }
 });
