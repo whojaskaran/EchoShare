@@ -3,7 +3,7 @@ const webpack = require("webpack");
 const path = require("path");
 
 module.exports = {
-  mode: "production",
+  mode: "development", // change to "production" for build
   entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -27,20 +27,32 @@ module.exports = {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
       },
+      {
+        // 🔥 THIS WAS MISSING (CRITICAL)
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: "asset/resource",
+      },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./public/index.html",
-      filename: "index.html",
     }),
     new webpack.DefinePlugin({
       "process.env.REACT_APP_SERVER_URL": JSON.stringify(
-        process.env.REACT_APP_SERVER_URL
+        process.env.REACT_APP_SERVER_URL || ""
       ),
     }),
   ],
   resolve: {
     extensions: [".js", ".jsx"],
+  },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "public"),
+    },
+    compress: true,
+    historyApiFallback: true,
+    port: 8080,
   },
 };
